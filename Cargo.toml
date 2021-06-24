@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "wasi-debug-echo", 
+    "wde-grpc-proxy"
+]
