@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: im-using-debug-echo-devices
+  labels:
+    app: im-using-debug-echo-devices
+spec:
+  containers:
+  - image: nginx
+    imagePullPolicy: IfNotPresent
+    name: nginx
+    resources:
+      limits:                        
+        akri.sh/akri-debug-echo-43beb5: "1"
+      requests:
+        akri.sh/akri-debug-echo-43beb5: "1"
+  restartPolicy: Always

@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wasi-debug-echo
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wasi-debug-echo
+spec:
+  containers:
+    - name: wasi-debug-echo
+      image: ghcr.io/rodz/wasi-debug-echo:v1.11
+      imagePullPolicy: Always
+      volumeMounts:
+        - name: wde-storage
+          mountPath: /tmp/wde-dir
+  volumes:
+    - name: wde-storage
+      configMap:
+        name: wasi-debug-echo
+  nodeSelector:
+    kubernetes.io/arch: "wasm32-wasi"
+  tolerations:
+    - key: "kubernetes.io/arch"
+      operator: "Equal"
+      value: "wasm32-wasi"
+      effect: "NoExecute"
+    - key: "node.kubernetes.io/network-unavailable"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "kubernetes.io/arch"
+      operator: "Equal"
+      value: "wasm32-wasi"
+      effect: "NoSchedule"
