@@ -17,22 +17,25 @@ pub const DEBUG_ECHO_INSTANCES_SHARED_LABEL: &str = "DEBUG_ECHO_INSTANCES_SHARED
 /// the device.
 pub const DEBUG_ECHO_DESCRIPTION_LABEL: &str = "DEBUG_ECHO_DESCRIPTION";
 // TODO: make this configurable
-pub const DISCOVERY_INTERVAL_SECS: u64 = 4;
+pub const DISCOVERY_INTERVAL_SECS: u64 = 1;
 
 // Input and output files dir.
-pub const OUTPUT_FILE_PATH: &str = "out.out";
-pub const INPUT_FILE_PATH: &str = "in.in";
+pub const OUTPUT_FILE_PATH: &str = "/tmp/wde-dir/out.out";
+pub const INPUT_FILE_PATH: &str = "/tmp/wde-dir/in.in";
+pub const DEBUG_FILE_PATH: &str = "/tmp/wde-dir/debug.txt";
 
 /// File acting as an environment variable for testing discovery.
 /// To mimic an instance going offline, kubectl exec into the pod running this discovery handler
 /// and echo "OFFLINE" > /tmp/debug-echo-availability.txt.
 /// To mimic a device coming back online, remove the word "OFFLINE" from the file
 /// ie: echo "" > /tmp/debug-echo-availability.txt.
-pub const DEBUG_ECHO_AVAILABILITY_CHECK_PATH: &str = "debug-echo-availability.txt";
+pub const DEBUG_ECHO_AVAILABILITY_CHECK_PATH: &str = "/tmp/wde-dir/debug-echo-availability.txt";
 /// String to write into DEBUG_ECHO_AVAILABILITY_CHECK_PATH to make Other devices undiscoverable
 pub const OFFLINE: &str = "OFFLINE";
 
 fn main() {
+    write_debug_file(DEBUG_FILE_PATH, "Wasi Debug Echo is up and running :)");
+    write_debug_file(DEBUG_ECHO_AVAILABILITY_CHECK_PATH, "ONLINE");
     println!("Wasi Debug Echo is up and running :)");
 
     // Input variables
@@ -47,7 +50,7 @@ fn main() {
     let mut first_loop = true;
 
     loop {
-        thread::sleep(Duration::from_secs(DISCOVERY_INTERVAL_SECS));
+        thread::sleep(Duration::from_millis(10));
 
         if !has_input() {
             println!("Input not specified yet!");
@@ -131,6 +134,12 @@ pub fn write_output_file (_devices: Vec<Device>) {
     println!("output: {}", json_output);
 
     fs::write(path, json_output).expect("Failed to write output!");
+}
+
+pub fn write_debug_file (file_path: &str ,value: &str) {
+    let path = Path::new(file_path);
+
+    fs::write(path, value).expect("Failed to write debug!");
 }
 
 // Check if input file has already been sent by gRPC proxy.
