@@ -1,8 +1,4 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: wasi-debug-echo
----
+# This is a Wasi application that is deployed to a Krustlet node.
 apiVersion: v1
 kind: Pod
 metadata:
@@ -10,15 +6,16 @@ metadata:
 spec:
   containers:
     - name: wasi-debug-echo
-      image: ghcr.io/rodz/wasi-debug-echo:v1.11
+      image: ghcr.io/rodz/wasi-debug-echo:v1.26
       imagePullPolicy: Always
       volumeMounts:
         - name: wde-storage
           mountPath: /tmp/wde-dir
   volumes:
     - name: wde-storage
-      configMap:
-        name: wasi-debug-echo
+      hostPath:
+        path: /tmp/wde-dir
+        type: Directory
   nodeSelector:
     kubernetes.io/arch: "wasm32-wasi"
   tolerations:
