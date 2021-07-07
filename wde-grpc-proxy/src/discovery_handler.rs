@@ -51,8 +51,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
         &self,
         request: tonic::Request<DiscoverRequest>,
     ) -> Result<Response<Self::DiscoverStream>, Status> {
-        println!("Connection stablished!");
-        info!("Connection stablished!");
+        println!("Connection established!");
         let register_sender = self.register_sender.clone();
         let discover_request = request.get_ref();
         let (mut discovered_devices_sender, discovered_devices_receiver) =

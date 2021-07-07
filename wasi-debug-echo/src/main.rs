@@ -17,7 +17,7 @@ pub const DEBUG_ECHO_INSTANCES_SHARED_LABEL: &str = "DEBUG_ECHO_INSTANCES_SHARED
 /// the device.
 pub const DEBUG_ECHO_DESCRIPTION_LABEL: &str = "DEBUG_ECHO_DESCRIPTION";
 // TODO: make this configurable
-pub const DISCOVERY_INTERVAL_SECS: u64 = 1;
+pub const DISCOVERY_INTERVAL_SECS: u64 = 5;
 
 // Input and output files dir.
 pub const OUTPUT_FILE_PATH: &str = "/tmp/wde-dir/out.out";
@@ -34,8 +34,6 @@ pub const DEBUG_ECHO_AVAILABILITY_CHECK_PATH: &str = "/tmp/wde-dir/debug-echo-av
 pub const OFFLINE: &str = "OFFLINE";
 
 fn main() {
-    write_debug_file(DEBUG_FILE_PATH, "Wasi Debug Echo is up and running :)");
-    write_debug_file(DEBUG_ECHO_AVAILABILITY_CHECK_PATH, "ONLINE");
     println!("Wasi Debug Echo is up and running :)");
 
     // Input variables
@@ -50,7 +48,7 @@ fn main() {
     let mut first_loop = true;
 
     loop {
-        thread::sleep(Duration::from_millis(10));
+        thread::sleep(Duration::from_secs(DISCOVERY_INTERVAL_SECS));
 
         if !has_input() {
             println!("Input not specified yet!");
@@ -104,7 +102,6 @@ pub fn read_input_file () -> DebugEchoDiscoveryDetails  {
     let display = path.display();
 
     let contents = fs::read_to_string(path).expect(format!("could not read {}", display).as_str());
-    println!("Checked for input and found:\n{}", contents);
 
     let new_details: DebugEchoDiscoveryDetails = match deserialize_discovery_details(&contents) {
         Ok(details) => details,

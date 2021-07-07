@@ -10,7 +10,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>
     // the protocol it uses.
     let name = "debugEcho";
 
-    println!("DH running named as: {}!", name);
+    println!("gRPC proxy running named as: {}!", name);
     // Specify whether the devices discovered by this discovery handler are locally attached (or embedded) to nodes or are
     // network based and usable/sharable by multiple nodes.
     let shared = true;
