@@ -62,6 +62,7 @@ fn main() {
             fs::read_to_string(DEBUG_ECHO_AVAILABILITY_CHECK_PATH).unwrap_or_default();
         
         if (availability.contains(OFFLINE) && !offline) || (offline && first_loop) {
+            println!("Checked for input and found:\n{:?}", descriptions);
             if first_loop {
                 first_loop = false;
             }
