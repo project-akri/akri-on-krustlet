@@ -3,7 +3,7 @@ This is a demo to showcase the usage of a wasi discovery handler with container 
 
 ## Start your kubernetes cluster
 
-For this demo we are using microk8s, but feel free to use any of your choice, krustlet has documentation for most of them.
+For this demo we are using microk8s, but feel free to use any of your choice, krustlet has documentation for most of them [here] (https://github.com/deislabs/krustlet/tree/main/docs/howto).
 
 ## Start your krustlet node
 
