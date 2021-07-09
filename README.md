@@ -1,5 +1,5 @@
 # Akri and Krustlet integration
-This project contains [Akri] (https://github.com/deislabs/akri) components built and designed to be executed as a WebAssembly application inside kubernetes with [Krustlet] (https://github.com/deislabs/krustlet).
+This project contains [Akri](https://github.com/deislabs/akri) components built and designed to be executed as a WebAssembly application inside kubernetes with [Krustlet](https://github.com/deislabs/krustlet).
 
 ## About
 
@@ -34,7 +34,7 @@ You can use [wasmtime](https://wasmtime.dev/) to run it locally, since wasm modu
 wasmtime target/wasm32-wasi/release/wasi-debug-echo.wasm --dir ~/../../tmp/wde-dir 
 ```
 
-## Discovery Handler (Wde) gRPC proxy
+## Discovery Handler gRPC proxy
 Since the network components from the Discovery Handler were abstracted this proxy created to execute as a container intermediate the communication between the Akri Agent and the Wasi Debug Echo. This proxy sends to an input file the discovery details sent by the agent so the wasm discovery handler can start discovering the devices, these devices are then received by this proxy in an output file, which is then sent back to the Akri Agent.
 
 ### How to build and run
