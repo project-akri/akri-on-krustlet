@@ -23,7 +23,7 @@ helm repo add akri-helm-charts https://deislabs.github.io/akri/
 helm install akri akri-helm-charts/akri \
     --set agent.allowDebugEcho=true \
     --set debugEcho.discovery.enabled=true \
-    --set debugEcho.discovery.image.repository=ghcr.io/rodz/wde-grpc-proxy-discovery-handler \
+    --set debugEcho.discovery.image.repository=ghcr.io/rodz/grpc-proxy-discovery-handler \
     --set debugEcho.discovery.image.tag=v1 \
     --set debugEcho.configuration.enabled=true \
     --set debugEcho.configuration.shared=false

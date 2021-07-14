@@ -5,7 +5,7 @@ WORKDIR /dh
 COPY ./Cargo.toml ./Cargo.toml
 RUN cargo build --release && \
     rm ./src/*.rs && \
-    DEP_PATH=`echo "./target/release/deps/wde-grpc-proxy*" | tr - _` && \
+    DEP_PATH=`echo "./target/release/deps/dh-grpc-proxy*" | tr - _` && \
     rm $DEP_PATH
 COPY ./src ./src
 RUN cargo build --release
@@ -14,5 +14,5 @@ FROM amd64/debian:buster-slim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libssl-dev && \
     apt-get clean
-COPY --from=build /dh/target/release/wde-grpc-proxy /wde-grpc-proxy
-ENTRYPOINT ["/wde-grpc-proxy"]
+COPY --from=build /dh/target/release/dh-grpc-proxy /dh-grpc-proxy
+ENTRYPOINT ["/dh-grpc-proxy"]

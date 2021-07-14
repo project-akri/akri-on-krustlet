@@ -34,6 +34,7 @@ pub const DEBUG_ECHO_AVAILABILITY_CHECK_PATH: &str = "/tmp/wde-dir/debug-echo-av
 pub const OFFLINE: &str = "OFFLINE";
 
 fn main() {
+    write_debug_file(DEBUG_ECHO_AVAILABILITY_CHECK_PATH, "ONLINE");
     println!("Wasi Debug Echo is up and running :)");
 
     // Input variables

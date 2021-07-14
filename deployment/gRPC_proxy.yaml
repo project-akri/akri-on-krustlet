@@ -18,7 +18,7 @@ spec:
           value: /var/lib/akri
         - name: DEBUG_ECHO_INSTANCES_SHARED
           value: "false"
-        image: ghcr.io/rodz/wde-grpc-proxy-discovery-handler:v1
+        image: ghcr.io/rodz/grpc-proxy-discovery-handler:v1
         imagePullPolicy: IfNotPresent
         name: akri-debug-echo-discovery
         resources:

@@ -1,5 +1,5 @@
 [package]
-name = "wde-grpc-proxy"
+name = "dh-grpc-proxy"
 version = "0.1.0"
 authors = ["rodz <rodrigo.f.rodrigues@hotmail.com>"]
 edition = "2018"
