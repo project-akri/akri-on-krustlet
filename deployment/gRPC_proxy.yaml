@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: akri-debug-echo-discovery-daemonset
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: akri-debug-echo-discovery
+  template:
+    metadata:
+      labels:
+        name: akri-debug-echo-discovery
+    spec:
+      containers:
+      - env:
+        - name: DISCOVERY_HANDLERS_DIRECTORY
+          value: /var/lib/akri
+        - name: DEBUG_ECHO_INSTANCES_SHARED
+          value: "false"
+        image: ghcr.io/rodz/grpc-proxy-discovery-handler:v1
+        imagePullPolicy: IfNotPresent
+        name: akri-debug-echo-discovery
+        resources:
+          limits:
+            cpu: 26m
+            memory: 24Mi
+          requests:
+            cpu: 10m
+            memory: 11Mi
+        volumeMounts:
+        - mountPath: /var/lib/akri
+          name: discovery-handlers
+          # This is the path wasm-debug-echo will use to storage
+        - mountPath: /tmp/wde-dir
+          name: wde-dir
+      volumes:
+      - hostPath:
+          path: /var/lib/akri
+          type: ""
+        name: discovery-handlers
+      - hostPath:
+          # This is the path wasm-debug-echo will use to storage
+          path: /tmp/wde-dir
+          type: ""
+        name: wde-dir
