@@ -1,0 +1,29 @@
+[package]
+name = "wasi-onvif"
+version = "0.1.0"
+authors = ["rodz <rodrigo.f.rodrigues@hotmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+http = "0.2.4"
+wasi-experimental-http = "0.5.0"
+anyhow = "1.0.38"
+async-trait = "0.1.0"
+bytes = "1.0.1"
+env_logger = "0.8.3"
+futures-util = "0.3"
+log = "0.4"
+serde = { version = "1.0.104", features = ["derive"]}
+serde_json = "1.0.45"
+serde_yaml = "0.8.11"
+serde_derive = "1.0.104"
+sxd-document = "0.3.0"
+sxd-xpath = "0.4.0"
+prost = "0.6"
+tokio = { version = "0.2", features = ["sync", "time", "stream", "fs"] }
+uuid = { version = "0.8.1", features = ["v4"] }
+xml-rs = { version = "0.8.0" }
+yaserde = "0.6.0"
+yaserde_derive = "0.6.0"
