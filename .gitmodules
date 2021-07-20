@@ -1,0 +1,3 @@
+[submodule "udev-rs"]
+	path = udev-rs
+	url = git@github.com:rodz/udev-rs.git

@@ -1,5 +1,5 @@
 pub mod udev_device {
-    extern crate libudev_sys;
+    use udev;
     use std::{ffi::OsStr, path::Path};
 
     /// Extension Trait for udev::Device. Enables creation of MockDevice for testing.
@@ -16,7 +16,7 @@ pub mod udev_device {
             Self: Sized;
     }
 
-    impl DeviceExt for libudev_sys::udev_device {
+    impl DeviceExt for udev::Device {
         fn mockable_devpath(&self) -> &OsStr {
             self.devpath()
         }
@@ -83,12 +83,7 @@ pub mod udev_device {
 }
 
 pub mod udev_enumerator {
-    extern crate libudev_sys;
-    #[cfg(test)]
-    use mockall::{automock, predicate::*};
-
     /// Wrap udev::Enumerator functions in a trait to enable mocking for testing.
-    #[cfg_attr(test, automock)]
     pub trait Enumerator {
         fn match_subsystem(&mut self, value: &str) -> std::io::Result<()>;
         fn nomatch_subsystem(&mut self, value: &str) -> std::io::Result<()>;
@@ -98,7 +93,7 @@ pub mod udev_enumerator {
         fn match_property(&mut self, key: &str, value: &str) -> std::io::Result<()>;
         fn match_tag(&mut self, value: &str) -> std::io::Result<()>;
         fn add_syspath(&mut self, value: &str) -> std::io::Result<()>;
-        fn scan_devices(&mut self) -> std::io::Result<libudev_sys::udev_device>;
+        fn scan_devices(&mut self) -> std::io::Result<udev::Devices>;
     }
 
     pub fn create_enumerator() -> impl Enumerator {
@@ -106,13 +101,13 @@ pub mod udev_enumerator {
     }
 
     pub struct EnumeratorImpl {
-        inner_enumerator: libudev_sys::udev_enumerate,
+        inner_enumerator: udev::Enumerator,
     }
 
     impl EnumeratorImpl {
         fn new() -> Self {
             EnumeratorImpl {
-                inner_enumerator: *libudev_sys::udev_enumerate_new(libudev_sys::udev_new()),
+                inner_enumerator: udev::Enumerator::new().unwrap(),
             }
         }
     }
