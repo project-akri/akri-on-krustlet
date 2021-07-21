@@ -6,20 +6,21 @@ use akri_discovery_utils::discovery::{
 
 use super::marshallers::discover_response_marshaller;
 use async_trait::async_trait;
-use tokio::sync::mpsc;
-use tokio::time::delay_for;
+use log::{error, info};
+use serde::{Deserialize, Serialize};
+use std::fs;
 use std::path::Path;
 use std::time::Duration;
-use std::fs;
-use log::{error, info};
+use tokio::sync::mpsc;
+use tokio::time::delay_for;
 use tonic::{Response, Status};
-use serde::{Serialize, Deserialize};
 
 pub const DISCOVERY_INTERVAL_SECS: u64 = 4;
 
 // Input and output files dir.
 pub const OUTPUT_FILE_PATH: &str = "/tmp/wde-dir/out.out";
 pub const INPUT_FILE_PATH: &str = "/tmp/wde-dir/in.in";
+pub const ONVIF_URLS_FILE_PATH: &str = "/tmp/wde-dir/onvif-urls.txt";
 pub const AVAILABILITY_FILE_PATH: &str = "/tmp/wde-dir/debug-echo-availability.txt";
 
 pub const ONLINE: &str = "ONLINE";
@@ -59,7 +60,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
         let discovery_handler_config: DebugEchoDiscoveryDetails =
             deserialize_discovery_details(&discover_request.discovery_details)
                 .map_err(|e| tonic::Status::new(tonic::Code::InvalidArgument, format!("{}", e)))?;
-        
+
         // Write to input file the Agents request
         write_input_file(discovery_handler_config);
         write_availability_file(ONLINE);
@@ -73,13 +74,13 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
                     continue;
                 }
 
-                let response : DiscoverResponse =  read_output_file ();
-                if let Err(e) = discovered_devices_sender
-                    .send(Ok(response))
-                    .await
-                {
+                let response: DiscoverResponse = read_output_file();
+                if let Err(e) = discovered_devices_sender.send(Ok(response)).await {
                     // TODO: consider re-registering here
-                    error!("discover - for debugEcho failed to send discovery response with error {}", e);
+                    error!(
+                        "discover - for debugEcho failed to send discovery response with error {}",
+                        e
+                    );
                     /*
                     if let Some(mut sender) = register_sender {
                         sender.send(()).await.unwrap();
@@ -95,7 +96,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
 }
 
 // This serialize the Agents input and writes it into the input file.
-pub fn write_input_file (debug_echo_discovery_details : DebugEchoDiscoveryDetails) {
+pub fn write_input_file(debug_echo_discovery_details: DebugEchoDiscoveryDetails) {
     let path = Path::new(INPUT_FILE_PATH);
 
     //TODO: handle errors
@@ -107,14 +108,14 @@ pub fn write_input_file (debug_echo_discovery_details : DebugEchoDiscoveryDetail
 
 // This reads the output files and serialize it to the agent gRPC format.
 // The file is deleted after this call.
-pub fn read_output_file () -> DiscoverResponse {
+pub fn read_output_file() -> DiscoverResponse {
     let path = Path::new(OUTPUT_FILE_PATH);
     let display = path.display();
 
     let contents = fs::read_to_string(path).expect(format!("could not read {}", display).as_str());
     println!("Checked for output and found:\n{}", contents);
 
-    let discovery_handler_config: DiscoverResponse = 
+    let discovery_handler_config: DiscoverResponse =
         discover_response_marshaller::from_json_to_discover_response(&contents);
 
     // Delete file.
@@ -123,13 +124,13 @@ pub fn read_output_file () -> DiscoverResponse {
     return discovery_handler_config;
 }
 
-pub fn write_availability_file (text: &str) {
+pub fn write_availability_file(text: &str) {
     let path = Path::new(AVAILABILITY_FILE_PATH);
     fs::write(path, text).expect("Failed to write availability!");
 }
 
 // Check if output file has already been printed by the wasi application.
-pub fn has_output () -> bool {
+pub fn has_output() -> bool {
     let path = Path::new(OUTPUT_FILE_PATH);
     return path.exists();
 }

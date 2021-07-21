@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 # TODO: Change this to Akri main when the library is merged
 akri-discovery-utils = { git = "https://github.com/deislabs/akri", branch = "main", package = "akri-discovery-utils" }
+anyhow = "1.0.38"
 async-trait = "0.1.0"
 tokio = { version = "0.2", features = ["rt-threaded", "sync", "time", "stream", "fs", "macros", "uds"] }
 tonic = {version = "0.1.0", features = ["tls"] }
@@ -19,3 +20,7 @@ protobuf = { version = "2.9.0", features = ["with-serde"] }
 grpc = "0.8.3"
 log = "0.4"
 tonic-build = "0.1.1"
+uuid = { version = "0.8.1", features = ["v4"] }
+xml-rs = { version = "0.8.0" }
+yaserde = "0.6.0"
+yaserde_derive = "0.6.0"
