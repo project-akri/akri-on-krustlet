@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use super::device::Device;
+use serde::{Deserialize, Serialize};
 
 /// This defines the ONVIF data stored in the Configuration
 /// CRD

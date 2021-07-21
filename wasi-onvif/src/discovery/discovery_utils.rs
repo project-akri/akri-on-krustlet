@@ -113,13 +113,15 @@ impl Http for HttpRequest {
             "application/soap+xml", "charset=utf-8", mime_action
         );
 
+        let b = Bytes::from(msg.to_string());
         let request = http::request::Builder::new()
             .method(http::Method::POST)
             .uri(url)
-            .header("CONTENT-TYPE", full_mime);
+            .header("CONTENT-TYPE", full_mime)
+            .body(Some(b))
+            .unwrap();
 
-        let b = Bytes::from(msg.to_string());
-        let request = request.body(Some(b)).unwrap();
+        println!("{:?}", request);
 
         let mut response = wasi_experimental_http::request(request).expect("cannot make request");
         if response.status_code != 200 {
