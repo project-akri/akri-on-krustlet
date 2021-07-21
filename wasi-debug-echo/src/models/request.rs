@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use super::device::Device;
+use serde::{Deserialize, Serialize};
 
 /// DebugEchoDiscoveryDetails describes the necessary information needed to discover and filter debug echo devices.
 /// Specifically, it contains a list (`descriptions`) of fake devices to be discovered.

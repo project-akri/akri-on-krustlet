@@ -1,12 +1,12 @@
 mod models;
 
-use std::path::Path;
-use std::{collections::HashMap, fs};
-use std::time::Duration;
-use std::thread;
 use models::device::Device;
 use models::request::DebugEchoDiscoveryDetails;
 use models::request::DebugEchoResult;
+use std::path::Path;
+use std::thread;
+use std::time::Duration;
+use std::{collections::HashMap, fs};
 
 /// Name debugEcho discovery handlers use when registering with the Agent
 pub const DISCOVERY_HANDLER_NAME: &str = "debugEcho";
@@ -43,9 +43,9 @@ fn main() {
 
     // check other config options
     let mut offline = fs::read_to_string(DEBUG_ECHO_AVAILABILITY_CHECK_PATH)
-            .unwrap()
-            .contains(OFFLINE);
-    
+        .unwrap()
+        .contains(OFFLINE);
+
     let mut first_loop = true;
 
     loop {
@@ -61,7 +61,7 @@ fn main() {
 
         let availability =
             fs::read_to_string(DEBUG_ECHO_AVAILABILITY_CHECK_PATH).unwrap_or_default();
-        
+
         if (availability.contains(OFFLINE) && !offline) || (offline && first_loop) {
             println!("Checked for input and found:\n{:?}", descriptions);
             if first_loop {
@@ -99,7 +99,7 @@ fn main() {
 }
 
 // This reads the input file and serialize it to the proper struct format.
-pub fn read_input_file () -> DebugEchoDiscoveryDetails  {
+pub fn read_input_file() -> DebugEchoDiscoveryDetails {
     let path = Path::new(INPUT_FILE_PATH);
     let display = path.display();
 
@@ -107,7 +107,7 @@ pub fn read_input_file () -> DebugEchoDiscoveryDetails  {
 
     let new_details: DebugEchoDiscoveryDetails = match deserialize_discovery_details(&contents) {
         Ok(details) => details,
-        Err(error) =>  {
+        Err(error) => {
             println!("An error ocorred while serializing the input: {:?}", error);
             DebugEchoDiscoveryDetails {
                 descriptions: Vec::new(),
@@ -120,13 +120,11 @@ pub fn read_input_file () -> DebugEchoDiscoveryDetails  {
 
 // This received the device list and output it in the proper JSON format to the
 // output file.
-pub fn write_output_file (_devices: Vec<Device>) {
+pub fn write_output_file(_devices: Vec<Device>) {
     let path = Path::new(OUTPUT_FILE_PATH);
 
     // Write output values on DebugEchoResult
-    let output_obj : DebugEchoResult = DebugEchoResult {
-        devices: _devices,
-    };
+    let output_obj: DebugEchoResult = DebugEchoResult { devices: _devices };
 
     //TODO: handle errors
     let json_output = serde_json::to_string(&output_obj).unwrap();
@@ -135,14 +133,14 @@ pub fn write_output_file (_devices: Vec<Device>) {
     fs::write(path, json_output).expect("Failed to write output!");
 }
 
-pub fn write_debug_file (file_path: &str ,value: &str) {
+pub fn write_debug_file(file_path: &str, value: &str) {
     let path = Path::new(file_path);
 
     fs::write(path, value).expect("Failed to write debug!");
 }
 
 // Check if input file has already been sent by gRPC proxy.
-pub fn has_input () -> bool {
+pub fn has_input() -> bool {
     let path = Path::new(INPUT_FILE_PATH);
     return path.exists();
 }
