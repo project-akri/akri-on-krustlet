@@ -59,8 +59,16 @@ cargo build --release
 cargo run
 ```
 
-## Demo
-Try the [Krustlet and Akri Integration demo](./demo.md) to test and check out the usage of devices discovered by a WebAssembly Discovery Handler into a regular Akri cluster. The result will be the architecture below.
+## Demos
+
+### Krustlet using Akri devices
+Try the [Krustlet using Akri devices demo](./demo-kubelet.md) to test and check out the usage of devices discovered by a WebAssembly Discovery Handler by a Wasm Module running on Krustlet. The result will be the architecture below.
+
+<img src="./KrustletUsingAkriDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
+margin-right: auto; display: block; margin-left: auto;"/>
+
+### Akri using devices discovered by a Wasi Discovery Handler
+Try the [Krustlet and Akri Integration demo](./demo-kubelet.md) to test and check out the usage of devices discovered by a WebAssembly Discovery Handler into a regular Akri cluster. The result will be the architecture below.
 
 <img src="./AkriUsingKrustletDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
