@@ -1,18 +1,18 @@
 # Akri and Krustlet integration demo
-This is a demo to showcase the usage of Akri discovered devices into a WebAssembly application running on Krustlet.
+This is a demo to showcase the usage of Akri discovered devices by a WebAssembly application running on Krustlet.
 
-The architecture we are achieving at the end is shown above, a local running Akri Agent will communicate with Krustlet device plugin and allow the creation of the resources discovered by the Wasi Discovery Handler.
+The architecture we are achieving at the end is shown below, a local running Akri Agent will communicate with Krustlet device plugin and allow the creation of the resources discovered by the Wasi Discovery Handler.
 
 <img src="./KrustletUsingAkriDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
 
 ## Start your kubernetes cluster
 
-For this demo we are using microk8s, but feel free to use any of your choice, krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
+For this demo we are using microk8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
 
-## Start your krustlet node
+## Start your Krustlet node
 
-For this demo we are using an unreleased version of krustle that enable the device plugin features. So we are running krustlet directily from the main branch from GitHub using the command:
+For this demo we are using an unreleased version of Krustlet that enable the device plugin features. So we are running Krustlet directly from the main branch from GitHub using the command:
 
 ```
 KRUSTLET_NODE_IP=127.0.13.1 \
@@ -22,11 +22,11 @@ KRUSTLET_NODE_IP=127.0.13.1 \
 	KRUSTLET_DEVICE_PLUGINS_DIR=~/device-plugins/ \
 	just run
 ```
-> Make sure the Node ip informed is present on the known hosts list (Manually add it if not present).
+> Make sure the Node IP informed is present on the known hosts list (Manually add it if not present).
 
 ## Start Akri Agent
 
-To inform the krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent from Akri main branch. 
+To inform the Krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent from Akri main branch. 
 
 ```
 kubectl apply -f ./deployment/helm/crds
@@ -52,17 +52,16 @@ The gRPC proxy does not do any discovery, it is responsible for informing the Wa
 ```
 cargo build -p dh-grpc-proxy --release
 RUST_LOG=info \
-    DISCOVERY_HANDLER_NAME=debugEcho \
     DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins \
     AGENT_NODE_NAME=krustlet \
-    ./target/release/dh-grpc-proxy
+    ./target/release/dh-grpc-proxy debugEcho
 ```
 > Note that we are using the proxy to simulate a Debug Echo Discovery Handler but it is a universal program and support any future DHs.
 
 ## Apply Debug Echo Discovery Configuration
 
 Now everything that should be running locally is already active, the rest of this demo will be focused on kubernetes components.
-Now we need to inform the Agent we need to start looking for these devices by applying the Discovery Configuration. As soon as it’s applied the Agent will look for registered Discovery Handlers for this specific protocol (In our case, Debug Echo) and start the discovery process.
+Now we need to inform the Agent it should start looking for these devices by applying the Discovery Configuration. As soon as it’s applied the Agent will look for registered Discovery Handlers for this specific protocol (In our case, Debug Echo) and start the discovery process.
 
 ```
 kubectl apply -f deployment/debug_echo_configuration.yaml
