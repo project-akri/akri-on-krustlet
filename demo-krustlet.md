@@ -52,9 +52,10 @@ The gRPC proxy does not do any discovery, it is responsible for informing the Wa
 ```
 cargo build -p dh-grpc-proxy --release
 RUST_LOG=info \
+    DISCOVERY_HANDLER_NAME=debugEcho \
     DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins \
     AGENT_NODE_NAME=krustlet \
-    ./target/release/dh-grpc-proxy debugEcho
+    ./target/release/dh-grpc-proxy
 ```
 > Note that we are using the proxy to simulate a Debug Echo Discovery Handler but it is a universal program and support any future DHs.
 

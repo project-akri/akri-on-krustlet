@@ -1,14 +1,20 @@
 mod discovery_handler;
 mod marshallers;
+use std::env;
 
 use akri_discovery_utils::discovery::discovery_handler::run_discovery_handler;
 use discovery_handler::DiscoveryHandlerImpl;
+
+pub const DISCOVERY_HANDLER_NAME_LABEL: &str = "DISCOVERY_HANDLER_NAME";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
     // Specify the name of this DiscoveryHandler. A discovery handler is usually, but not necessarily, identified by
     // the protocol it uses.
-    let name = "debugEcho";
+    let name = match env::var(DISCOVERY_HANDLER_NAME_LABEL) {
+        Ok(n) => n,
+        Err(_e) => "debugEcho".to_string(),
+    };
 
     println!("gRPC proxy running named as: {}!", name);
     // Specify whether the devices discovered by this discovery handler are locally attached (or embedded) to nodes or are
@@ -24,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>
     // and serve its discover service over UDS at the socket path
     // `format!("{}/{}.sock"), env::var("DISCOVERY_HANDLERS_DIRECTORY"), name)`.
     println!("Turning the server on!");
-    run_discovery_handler(discovery_handler, register_receiver, name, shared).await?;
+    run_discovery_handler(discovery_handler, register_receiver, &name, shared).await?;
 
     Ok(())
 }
