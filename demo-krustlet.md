@@ -12,6 +12,7 @@ For this demo we are using microk8s, but feel free to use any of your choice, Kr
 
 ## Start your Krustlet node
 
+Krustlet has an automatic bootstrap process that gives the node the right authorizations to execute, you can find a tutorial for it [here](https://github.com/krustlet/krustlet/blob/main/docs/howto/bootstrapping.md).
 For this demo we are using an unreleased version of Krustlet that enable the device plugin features. So we are running Krustlet directly from the main branch from GitHub using the command:
 
 ```
@@ -39,7 +40,7 @@ RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 	HOST_IMAGE_ENDPOINT=/var/snap/microk8s/common/run/containerd.sock \
 	./target/release/agent
 ```
-> Note that its important to not run this as `sudo` and make sure Kube Config points to one with `admin` permissions (Krustlet bootstrap file does not work for this).
+> Note that it’s important to not run this as `sudo` and make sure Kube Config points to one with `admin` permissions (Krustlet bootstrap file does not work for this).
 > Also note to apply the crds directory before running the Agent, as it uses them to connect with the Kubernetes node.
 
 ## Start the gRPC proxy
@@ -57,11 +58,11 @@ RUST_LOG=info \
     AGENT_NODE_NAME=krustlet \
     ./target/release/dh-grpc-proxy
 ```
-> Note that we are using the proxy to simulate a Debug Echo Discovery Handler but it is a universal program and support any future DHs.
+> Note that we are using the proxy to simulate a Debug Echo Discovery Handler, but it is a universal program and support any future DHs.
 
 ## Apply Debug Echo Discovery Configuration
 
-Now everything that should be running locally is already active, the rest of this demo will be focused on kubernetes components.
+Now everything that should be running locally is already active, the rest of this demo will be focused on Kubernetes components.
 Now we need to inform the Agent it should start looking for these devices by applying the Discovery Configuration. As soon as it’s applied the Agent will look for registered Discovery Handlers for this specific protocol (In our case, Debug Echo) and start the discovery process.
 
 ```
@@ -87,7 +88,7 @@ kubectl get akrii
 
 ## Requesting resources from Krustlet
 
-Now that the devices are already been advertised as Kubernetes resources we can deploy a WebAssembly module that request them.
+Now that the devices are already been advertised as Kubernetes resources, we can deploy a WebAssembly module that request them.
 
 ```
 kubectl apply -f ./deployment/wasm_pod_using_wde.yaml

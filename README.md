@@ -5,11 +5,11 @@ This project contains [Akri](https://github.com/deislabs/akri) components built 
 
 Akri is a Kubernetes component that finds and lets you use IoT devices under the k8s environment. Krustlet is also a Kubernetes component and lets you run WebAssembly application (In addition to docker containers) on your k8s cluster. This project is about merging these two ideas together and making Akri compiled as a wasm-wasi application be deployed into a Kubernetes cluster using Krustlet, creating new ways to use these devices in your Wasm applications and give Akri users all the advantages of this technology.
 
-As it was designed to be executed on the edge, Akri is not expected to consume lots of memory and could benefit from any improvements in this aspect. By making Akri compatible with Krustlet a significant improvement in startup time, runtime performance and memory consumption is expect, reducing the consumption of the user's resources.
+As it was designed to be executed on the edge, Akri is not expected to consume lots of memory and could benefit from any improvements in this aspect. By making Akri compatible with Krustlet a significant improvement in startup time, runtime performance and memory consumption is expected, reducing the consumption of the user's resources.
 
 ### WebAssembly (Wasm)
 
-Wasm has been a promising tool and has already revolutionized web development, but all the predictability, scalability, efficiency, and security improvements that it has when compared with other browsers tools like JavaScript could also be applied to server-side technologies like servers, services and . 
+Wasm has been a promising tool and has already revolutionized web development, but all the predictability, scalability, efficiency, and security improvements that it has when compared with other browsers tools like JavaScript could also be applied to server-side technologies like servers and services. 
 
 [WebAssembly Systems Interface (Wasi)](https://wasi.dev/) is part of the movement to use WebAssembly in the server and our goal is to put this into practice and bring it to the Kubernetes environment and enrich the Krustlet ecosystem, taking advantage from the “compiled once, and run anywhere” lemma.
 
@@ -24,7 +24,6 @@ For now, Wasm and Wasi don't have a support for asynchronous and multithreading 
 As mentioned before, Wasm can't handle Async calls, making it challenging to deal with networks. The current state of Wasi development doesn’t include native support for Sockets and Http requests, but the community have created some workarounds that enabled some of these features. These are experimental and not recommended to be used in a production environment but serve as a preview and experience on what using the network on WebAssembly might look like before it is implemented and integrated into the main project.
 
 ## Wasi Debug Echo
-
 Debug Echo is a Akri Discovery Handler for debugging and serves to test Akri devices, more details can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md)
 
 To create a WebAssembly version of the Debug Echo Discovery Handler and assuming the limitations listed this version of Akri has been designed to be executed in a single-threaded environment and only uses files as the communication platform, avoiding dealing with network components.
@@ -51,7 +50,7 @@ wasm-to-oci push target/wasm32-wasi/release/wasi-debug-echo.wasm {YOUR_OCI_REGIS
 ```
 
 ## Discovery Handler gRPC proxy
-Since the network components from the Discovery Handler were abstracted this proxy created to execute as a container intermediate the communication between the Akri Agent and any WebAssembly builded Discovery Handles. This proxy sends to an input file the discovery details sent by the agent so the wasm Discovery Handler can start discovering the devices, these devices are then received by this proxy in an output file, which is then sent back to the Akri Agent.
+Since the network components from the Discovery Handler were abstracted, this proxy created to execute as a container intermediate the communication between the Akri Agent and any WebAssembly Discovery Handles. This proxy sends to an input file the discovery details sent by the agent so the wasm Discovery Handler can start discovering the devices, these devices are then received by this proxy in an output file, which is then sent back to the Akri Agent.
 
 ### How to build and run
 

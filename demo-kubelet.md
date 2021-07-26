@@ -16,7 +16,7 @@ This can be done following Krustlet tutorials [here](https://github.com/deislabs
 
 ## Start Akri
 
-Lets make our cluster ready for handling the discovered devices and for this we are using Akri's Debug Echo configurations, more information can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
+Let us make our cluster ready for handling the discovered devices and for this we are using Akri's Debug Echo configurations, more information can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
 
 ```
 helm repo add akri-helm-charts https://deislabs.github.io/akri/
