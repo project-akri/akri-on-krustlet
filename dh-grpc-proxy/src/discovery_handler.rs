@@ -51,7 +51,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
         &self,
         request: tonic::Request<DiscoverRequest>,
     ) -> Result<Response<Self::DiscoverStream>, Status> {
-        println!("Connection established!");
+        info!("Connection established!");
         let register_sender = self.register_sender.clone();
         let discover_request = request.get_ref();
         let (mut discovered_devices_sender, discovered_devices_receiver) =
@@ -77,7 +77,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
                 if let Err(e) = discovered_devices_sender.send(Ok(response)).await {
                     // TODO: consider re-registering here
                     error!(
-                        "discover - for debugEcho failed to send discovery response with error {}",
+                        "discover - proxy failed to send discovery response with error {}",
                         e
                     );
                     /*
@@ -100,7 +100,7 @@ pub fn write_input_file(debug_echo_discovery_details: DebugEchoDiscoveryDetails)
 
     //TODO: handle errors
     let json_output = serde_json::to_string(&debug_echo_discovery_details).unwrap();
-    println!("input: {}", json_output);
+    info!("Input file written: {}", json_output);
 
     fs::write(path, json_output).expect("Failed to write input!");
 }
@@ -112,7 +112,7 @@ pub fn read_output_file() -> DiscoverResponse {
     let display = path.display();
 
     let contents = fs::read_to_string(path).expect(format!("could not read {}", display).as_str());
-    println!("Checked for output and found:\n{}", contents);
+    info!("Checked for output file and found:\n{}", contents);
 
     let discovery_handler_config: DiscoverResponse =
         discover_response_marshaller::from_json_to_discover_response(&contents);
@@ -128,7 +128,7 @@ pub fn write_availability_file(text: &str) {
     fs::write(path, text).expect("Failed to write availability!");
 }
 
-// Check if output file has already been printed by the wasi application.
+// Check if output file has already been printed by the Wasi application.
 pub fn has_output() -> bool {
     let path = Path::new(OUTPUT_FILE_PATH);
     return path.exists();
