@@ -6,15 +6,12 @@ metadata:
 spec:
   containers:
     - name: im-using-debug-echo-devices
-      image: webassembly.azurecr.io/hello-world-wasi-c:v0.1.0
+      image: ghcr.io/rodz/wasi-hello-world:v1
       resources:
         requests:
           "akri.sh/akri-debug-echo-43beb5" : 1
         limits:
           "akri.sh/akri-debug-echo-43beb5" : 1
-      env:
-        - name: FOO
-          value: bar
   nodeSelector:
     kubernetes.io/arch: "wasm32-wasi"
   tolerations:
