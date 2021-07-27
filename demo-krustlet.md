@@ -1,4 +1,4 @@
-# Akri and Krustlet integration demo
+# Krustlet using Akri devices demo
 This is a demo to showcase the usage of Akri discovered devices by a WebAssembly application running on Krustlet.
 
 The architecture we are achieving at the end is shown below, a local running Akri Agent will communicate with Krustlet device plugin and allow the creation of the resources discovered by the Wasi Discovery Handler.
@@ -13,7 +13,7 @@ For this demo we are using microk8s, but feel free to use any of your choice, Kr
 ## Start your Krustlet node
 
 Krustlet has an automatic bootstrap process that gives the node the right authorizations to execute, you can find a tutorial for it [here](https://github.com/krustlet/krustlet/blob/main/docs/howto/bootstrapping.md).
-For this demo we are using an unreleased version of Krustlet that enable the device plugin features. So we are running Krustlet directly from the main branch from GitHub using the command:
+For this demo we are using an unreleased version of Krustlet that enable the device plugin features. Because of that, we are running Krustlet directly from the main branch from GitHub using the command:
 
 ```
 KRUSTLET_NODE_IP=127.0.13.1 \
@@ -25,12 +25,23 @@ KRUSTLET_NODE_IP=127.0.13.1 \
 ```
 > Make sure the Node IP informed is present on the known hosts list (Manually add it if not present).
 
+## Apply Akri configurations
+
+For making our cluster ready to receive the Akri Agent we should install some Akri configurations, this will include the CRDs used to connect with the Kubernetes node and also the Debug Echo configurations so the Agent can start the discovery of Debug Echo devices.
+
+```
+helm install debug-config akri-helm-charts/akri \
+ --set controller.enabled=false \
+ --set agent.enabled=false \
+ --set rbac.enabled=false \
+ --set debugEcho.configuration.enabled=true
+```
+
 ## Start Akri Agent
 
 To inform the Krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent from Akri main branch. 
 
 ```
-kubectl apply -f ./deployment/helm/crds
 cargo build --release
 RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 	DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins/ \
@@ -41,7 +52,7 @@ RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 	./target/release/agent
 ```
 > Note that it’s important to not run this as `sudo` and make sure Kube Config points to one with `admin` permissions (Krustlet bootstrap file does not work for this).
-> Also note to apply the crds directory before running the Agent, as it uses them to connect with the Kubernetes node.
+> Also note that since we have applied the Akri Debug Echo Configurations, the Agent is already trying to find a discovery handler for these specified devices.
 
 ## Start the gRPC proxy
 
@@ -60,19 +71,10 @@ RUST_LOG=info \
 ```
 > Note that we are using the proxy to simulate a Debug Echo Discovery Handler, but it is a universal program and support any future DHs.
 
-## Apply Debug Echo Discovery Configuration
-
-Now everything that should be running locally is already active, the rest of this demo will be focused on Kubernetes components.
-Now we need to inform the Agent it should start looking for these devices by applying the Discovery Configuration. As soon as it’s applied the Agent will look for registered Discovery Handlers for this specific protocol (In our case, Debug Echo) and start the discovery process.
-
-```
-kubectl apply -f deployment/debug_echo_configuration.yaml
-```
-> Note that now new logs have appeared on the gRPC proxy as it already received the discovery details from the Agent.
-
 ## Deploy Wasi Debug Echo
 
-Now the gRPC proxy should have successfully connected with the Akri's Agent and the input file was already written on the correct directory. The gRPC proxy is now waiting for the output file to be written by our WebAssembly application, we can deploy it now.
+Now everything that should be running locally is already active, the rest of this demo will be focused on Kubernetes.
+Now the gRPC proxy should have successfully connected with the Akri Agent and the input file was already written on the correct directory. The gRPC proxy is now waiting for the output file to be written by our WebAssembly application, we can deploy it now.
 
 ```
 kubectl apply -f ./deployment/wasi_debug_echo.yaml 

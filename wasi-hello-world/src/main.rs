@@ -7,8 +7,9 @@ fn main() {
         Ok(n) => n,
         Err(_e) => "debugEcho".to_string(),
     };
-    println!("Pod is running and using debugEcho device named: {}", device_name);
-    loop {
-
-    }
+    println!(
+        "Pod is running and using debugEcho device named: {}",
+        device_name
+    );
+    loop {}
 }

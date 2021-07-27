@@ -1,4 +1,4 @@
-# Akri and Krustlet integration demo
+# Akri using devices discovered by a Wasi Discovery Handler demo
 This is a demo to showcase the usage of a Wasi Discovery Handler and integration with the regular container Akri components.
 
 The architecture we are achieving at the end is shown below, the regular Akri deployments will be able to handle and use devices discovered by a WebAssembly Discovery Handler running on a Krustlet node.
