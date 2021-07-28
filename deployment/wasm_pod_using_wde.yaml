@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: im-using-debug-echo-devices
-      image: ghcr.io/rodz/wasi-hello-world:v1
+      image: ghcr.io/rodz/wasi-debug-echo-hello-world:v1
       resources:
         requests:
           "akri.sh/akri-debug-echo-43beb5" : 1

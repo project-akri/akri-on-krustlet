@@ -2,5 +2,5 @@
 members = [
     "dh-grpc-proxy",
     "wasi-debug-echo",
-    "wasi-hello-world"
+    "wde-hello-world"
 ]
