@@ -24,7 +24,7 @@ For now, Wasm and Wasi don't have a support for asynchronous and multithreading 
 As mentioned before, Wasm can't handle Async calls, making it challenging to deal with networks. The current state of Wasi development doesn’t include native support for Sockets and Http requests, but the community have created some workarounds that enabled some of these features. These are experimental and not recommended to be used in a production environment but serve as a preview and experience on what using the network on WebAssembly might look like before it is implemented and integrated into the main project.
 
 ## Wasi Debug Echo
-Debug Echo is a Akri Discovery Handler for debugging and serves to test Akri devices, more details can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
+An Akri Discovery Handler is responsible for discovering and informing the Agent about new registered devices. Debug Echo is a Akri Discovery Handler for debugging and serves to test Akri devices, more details can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
 
 To create a WebAssembly version of the Debug Echo Discovery Handler and assuming the limitations listed this version of Akri has been designed to be executed in a single-threaded environment and only uses files as the communication platform, avoiding dealing with network components.
 
@@ -75,3 +75,10 @@ Try the [Krustlet and Akri Integration demo](./demo-kubelet.md) to test and chec
 
 <img src="./AkriUsingKrustletDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
+
+## Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](./CODE_OF_CONDUCT.md).
+
+## Licensing
+This project is released under the [Apache License](./LICENSE).
