@@ -60,9 +60,8 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
             deserialize_discovery_details(&discover_request.discovery_details)
                 .map_err(|e| tonic::Status::new(tonic::Code::InvalidArgument, format!("{}", e)))?;
 
-        // Write to input file the Agents request
+        // Write Agents request to input file
         write_input_file(discovery_handler_config);
-        write_availability_file(ONLINE);
 
         tokio::spawn(async move {
             loop {
@@ -111,7 +110,8 @@ pub fn read_output_file() -> DiscoverResponse {
     let path = Path::new(OUTPUT_FILE_PATH);
     let display = path.display();
 
-    let contents = fs::read_to_string(path).expect(format!("could not read {}", display).as_str());
+    let contents =
+        fs::read_to_string(path).unwrap_or_else(|_| panic!("could not read {}", display));
     info!("Checked for output file and found:\n{}", contents);
 
     let discovery_handler_config: DiscoverResponse =
@@ -120,7 +120,7 @@ pub fn read_output_file() -> DiscoverResponse {
     // Delete file.
     fs::remove_file(path).expect("Failed to delete output file!");
 
-    return discovery_handler_config;
+    discovery_handler_config
 }
 
 pub fn write_availability_file(text: &str) {
@@ -131,5 +131,5 @@ pub fn write_availability_file(text: &str) {
 // Check if output file has already been printed by the Wasi application.
 pub fn has_output() -> bool {
     let path = Path::new(OUTPUT_FILE_PATH);
-    return path.exists();
+    path.exists()
 }

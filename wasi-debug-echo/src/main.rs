@@ -103,19 +103,20 @@ pub fn read_input_file() -> DebugEchoDiscoveryDetails {
     let path = Path::new(INPUT_FILE_PATH);
     let display = path.display();
 
-    let contents = fs::read_to_string(path).expect(format!("could not read {}", display).as_str());
+    let contents =
+        fs::read_to_string(path).unwrap_or_else(|_| panic!("could not read {}", display));
 
     let new_details: DebugEchoDiscoveryDetails = match deserialize_discovery_details(&contents) {
         Ok(details) => details,
         Err(error) => {
-            println!("An error ocorred while serializing the input: {:?}", error);
+            println!("An error occurred while serializing the input: {:?}", error);
             DebugEchoDiscoveryDetails {
                 descriptions: Vec::new(),
             }
         }
     };
 
-    return new_details;
+    new_details
 }
 
 // This received the device list and output it in the proper JSON format to the
@@ -142,7 +143,7 @@ pub fn write_debug_file(file_path: &str, value: &str) {
 // Check if input file has already been sent by gRPC proxy.
 pub fn has_input() -> bool {
     let path = Path::new(INPUT_FILE_PATH);
-    return path.exists();
+    path.exists()
 }
 
 /// This obtains the expected type `T` from a discovery details String by running it through function `f` which will

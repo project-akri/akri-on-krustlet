@@ -1,3 +1,4 @@
+// Modified from Akri discovery utils: https://github.com/deislabs/akri/blob/main/discovery-utils/src/discovery/v0.rs
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, ::prost::Message)]

@@ -1,9 +1,9 @@
 use akri_discovery_utils::discovery::v0::{Device, DiscoverResponse};
-use serde_json::Serializer;
 use serde_json::Value;
 
 pub fn from_json_to_discover_response(json_str: &str) -> DiscoverResponse {
-    let json: Value = serde_json::from_str(json_str).unwrap();
+    let json: Value = serde_json::from_str(json_str)
+        .expect("Failed to parse output! This should be in the JSON format!");
 
     DiscoverResponse {
         devices: json["devices"]
