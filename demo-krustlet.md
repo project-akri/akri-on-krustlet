@@ -1,14 +1,14 @@
 # Krustlet using Akri devices demo
 This is a demo to showcase the usage of Akri discovered devices by a WebAssembly application running on Krustlet.
 
-The architecture we are achieving at the end is shown below, a local running Akri Agent will communicate with Krustlet device plugin and allow the creation of the resources discovered by the Wasi Discovery Handler.
+The architecture we are achieving at the end is shown below, a local running Akri Agent will communicate with Krustlet device plugin manager and allow the creation of the resources discovered by the Wasi Discovery Handler.
 
 <img src="./KrustletUsingAkriDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
 
 ## Start your kubernetes cluster
 
-For this demo we are using microk8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
+For this demo we are using MicroK8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
 
 ## Start your Krustlet node
 
@@ -16,11 +16,12 @@ Krustlet has an automatic bootstrap process that gives the node the right author
 For this demo we are using an unreleased version of Krustlet that enable the device plugin features. Because of that, we are running Krustlet directly from the main branch from GitHub using the command:
 
 ```
+git clone https://github.com/krustlet/krustlet.git
+cd krustlet
 KRUSTLET_NODE_IP=127.0.13.1 \
 	KRUSTLET_HOSTNAME=krustlet \
 	KRUSTLET_NODE_NAME=krustlet \
 	KRUSTLET_BOOTSTRAP_FILE={YOUR_BOOTSTRAP_FILE} \
-	KRUSTLET_DEVICE_PLUGINS_DIR=~/device-plugins/ \
 	just run
 ```
 > Make sure the Node IP informed is present on the known hosts list (Manually add it if not present).
@@ -30,6 +31,7 @@ KRUSTLET_NODE_IP=127.0.13.1 \
 For making our cluster ready to receive the Akri Agent we should install some Akri configurations, this will include the CRDs used to connect with the Kubernetes node and also the Debug Echo configurations so the Agent can start the discovery of Debug Echo devices.
 
 ```
+helm repo add akri-helm-charts https://deislabs.github.io/akri/
 helm install debug-config akri-helm-charts/akri \
  --set controller.enabled=false \
  --set agent.enabled=false \
@@ -42,6 +44,8 @@ helm install debug-config akri-helm-charts/akri \
 To inform the Krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent from Akri main branch. 
 
 ```
+git clone https://github.com/deislabs/akri.git
+cd akri
 cargo build --release
 RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 	DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins/ \
