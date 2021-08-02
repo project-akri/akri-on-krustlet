@@ -48,7 +48,7 @@ git clone https://github.com/deislabs/akri.git
 cd akri
 cargo build --release
 RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
-	DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins/ \
+	DISCOVERY_HANDLERS_DIRECTORY=~/akri \
 	AGENT_NODE_NAME=krustlet \
 	HOST_CRICTL_PATH=/usr/local/bin/crictl \
 	HOST_RUNTIME_ENDPOINT=/var/snap/microk8s/common/run/containerd.sock \
@@ -69,7 +69,7 @@ The gRPC proxy does not do any discovery, it is responsible for informing the Wa
 cargo build -p dh-grpc-proxy --release
 RUST_LOG=info \
     DISCOVERY_HANDLER_NAME=debugEcho \
-    DISCOVERY_HANDLERS_DIRECTORY=~/device-plugins \
+    DISCOVERY_HANDLERS_DIRECTORY=~/akri \
     AGENT_NODE_NAME=krustlet \
     ./target/release/dh-grpc-proxy
 ```
