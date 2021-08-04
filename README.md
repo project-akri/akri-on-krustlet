@@ -1,5 +1,5 @@
 # Akri and Krustlet integration
-This project contains [Akri](https://github.com/deislabs/akri) components built and designed to be executed as a [WebAssembly](https://webassembly.org/) application inside Kubernetes with [Krustlet](https://github.com/deislabs/krustlet).
+This project contains [Akri](https://github.com/deislabs/akri) components built and designed to be executed as a [WebAssembly](https://webassembly.org/) application inside Kubernetes with [Krustlet](https://github.com/krustlet/krustlet).
 
 ## About
 

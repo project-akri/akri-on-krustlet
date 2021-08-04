@@ -1,4 +1,4 @@
-# Modified from krustlet hello world demo: https://github.com/deislabs/krustlet/blob/main/demos/wasi/hello-world-c/k8s.yaml
+# This is a Wasi application that is deployed to a Krustlet node.
 apiVersion: v1
 kind: Pod
 metadata:
