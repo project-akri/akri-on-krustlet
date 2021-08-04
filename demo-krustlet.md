@@ -39,13 +39,23 @@ helm install debug-config akri-helm-charts/akri \
  --set debugEcho.configuration.enabled=true
 ```
 
-## Start Akri Agent
+## Clone and update Akri repository
 
-To inform the Krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent from Akri main branch. 
+Now lets clone the Akri project and do some small changes to make it compatible with the Krustlet environment.
 
 ```
 git clone https://github.com/deislabs/akri.git
 cd akri
+```
+
+As of now Akri's Device Plugin and Kubelet directories are not configurable using environment variables, so update `DEVICE_PLUGIN_PATH` and `KUBELET_SOCKET` in `/agent/src/util/constants.rs#L13` to represent the Krustlet directory `~/.krustlet/device_plugins`. 
+Please check [here](https://github.com/deislabs/akri/issues/357) for more recent updates.
+
+## Start Akri Agent
+
+To inform the Krustlet node about new resources and communication with the Discovery Handler we will now run the Akri Agent using the project changed on last step. 
+
+```
 cargo build --release
 RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 	DISCOVERY_HANDLERS_DIRECTORY=~/akri \
@@ -57,7 +67,6 @@ RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 ```
 > Note that it’s important to not run this as `sudo` and make sure Kube Config points to one with `admin` permissions (Krustlet bootstrap file does not work for this).
 > Also note that since we have applied the Akri Debug Echo Configurations, the Agent is already trying to find a discovery handler for these specified devices.
-> As of now Akri's Device plugin and kubelet directories are not configurable using environment variables, so update `DEVICE_PLUGIN_PATH` and `KUBELET_SOCKET` in `/agent/src/util/constants.rs#L13` to represent Krustlet directory `~/.krustlet/device_plugins`. Please check [here](https://github.com/deislabs/akri/issues/357) for more recent updates.
 
 ## Start the gRPC proxy
 
