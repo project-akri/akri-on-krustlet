@@ -28,7 +28,7 @@ KRUSTLET_NODE_IP=127.0.13.1 \
 
 ## Apply Akri configurations
 
-For making our cluster ready to receive the Akri Agent we should install some Akri configurations, this will include the CRDs used to connect with the Kubernetes node and also the Debug Echo configurations so the Agent can start the discovery of Debug Echo devices.
+For making our cluster ready to receive the Akri Agent we should install some Akri configurations, this will include the CRDs used to connect with the Kubernetes node and also the Debug Echo Configuration so the Agent can start the discovery of Debug Echo devices.
 
 ```
 helm repo add akri-helm-charts https://deislabs.github.io/akri/
