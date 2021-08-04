@@ -8,11 +8,11 @@ margin-right: auto; display: block; margin-left: auto;"/>
 
 ## Start your kubernetes cluster
 
-For this demo we are using MicroK8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
+For this demo we are using MicroK8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/krustlet/krustlet-docs/tree/main/content/howto).
 
 ## Start your Krustlet node
 
-Krustlet has an automatic bootstrap process that gives the node the right authorizations to execute, you can find a tutorial for it [here](https://github.com/krustlet/krustlet/blob/main/docs/howto/bootstrapping.md).
+Krustlet has an automatic bootstrap process that gives the node the right authorizations to execute, you can find a tutorial for it [here](https://github.com/krustlet/krustlet-docs/blob/main/content/howto/bootstrapping.md).
 For this demo we are using an unreleased version of Krustlet that enable the device plugin features. Because of that, we are running Krustlet directly from the main branch from GitHub using the command:
 
 ```
@@ -57,6 +57,7 @@ RUST_LOG=info RUST_BACKTRACE=1 KUBECONFIG=~/.kube/config \
 ```
 > Note that it’s important to not run this as `sudo` and make sure Kube Config points to one with `admin` permissions (Krustlet bootstrap file does not work for this).
 > Also note that since we have applied the Akri Debug Echo Configurations, the Agent is already trying to find a discovery handler for these specified devices.
+> As of now Akri's Device plugin and kubelet directories are not configurable using environment variables, so update `DEVICE_PLUGIN_PATH` and `KUBELET_SOCKET` in `/agent/src/util/constants.rs#L13` to represent Krustlet directory `~/.krustlet/device_plugins`. Please check [here](https://github.com/deislabs/akri/issues/357) for more recent updates.
 
 ## Start the gRPC proxy
 
@@ -66,6 +67,7 @@ Now that the Agent is running, we can start the discovery process. Once we run t
 The gRPC proxy does not do any discovery, it is responsible for informing the Wasi Discovery Handlers about current constraints and passing to the Agent the list of discovered devices it receives.
 
 ```
+mkdir /tmp/wde-dir
 cargo build -p dh-grpc-proxy --release
 RUST_LOG=info \
     DISCOVERY_HANDLER_NAME=debugEcho \
@@ -73,6 +75,7 @@ RUST_LOG=info \
     AGENT_NODE_NAME=krustlet \
     ./target/release/dh-grpc-proxy
 ```
+> We are creating the `/tmp/wde-dir` directory as it will be used for the communication between this gRPC proxy and the Discovery Handler.
 > Note that we are using the proxy to simulate a Debug Echo Discovery Handler, but it is a universal program and support any future DHs.
 
 ## Deploy Wasi Debug Echo

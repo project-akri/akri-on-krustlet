@@ -8,11 +8,11 @@ margin-right: auto; display: block; margin-left: auto;"/>
 
 ## Start your Kubernetes cluster
 
-For this demo we are using microk8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
+For this demo we are using microk8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/krustlet/krustlet-docs/tree/main/content/howto).
 
 ## Start your krustlet node
 
-This can be done following Krustlet tutorials [here](https://github.com/deislabs/krustlet/blob/main/docs/intro/quickstart.md).
+This can be done following Krustlet tutorials [here](https://github.com/krustlet/krustlet-docs/blob/main/content/intro/quickstart.md).
 
 ## Start Akri
 
