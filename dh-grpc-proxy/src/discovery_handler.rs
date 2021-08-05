@@ -52,7 +52,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
         request: tonic::Request<DiscoverRequest>,
     ) -> Result<Response<Self::DiscoverStream>, Status> {
         info!("Connection established!");
-        let register_sender = self.register_sender.clone();
+        let register_sender = Some(self.register_sender.clone());
         let discover_request = request.get_ref();
         let (mut discovered_devices_sender, discovered_devices_receiver) =
             mpsc::channel(DISCOVERED_DEVICES_CHANNEL_CAPACITY);
@@ -64,6 +64,7 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
         write_input_file(discovery_handler_config);
 
         tokio::spawn(async move {
+            // TODO: Make it a file watcher
             loop {
                 delay_for(Duration::from_secs(DISCOVERY_INTERVAL_SECS)).await;
 
@@ -79,11 +80,9 @@ impl DiscoveryHandler for DiscoveryHandlerImpl {
                         "discover - proxy failed to send discovery response with error {}",
                         e
                     );
-                    /*
                     if let Some(mut sender) = register_sender {
                         sender.send(()).await.unwrap();
                     }
-                    */
                     break;
                 }
             }
