@@ -1,22 +1,22 @@
-# Akri and Krustlet integration demo
+# Akri using devices discovered by a Wasi Discovery Handler demo
 This is a demo to showcase the usage of a Wasi Discovery Handler and integration with the regular container Akri components.
 
-The architecture we are achieving at the end is shown above, the regular Akri deployments will be able to handle and use devices discovered by a WebAssembly Discovery Handler running on a Krustlet node.
+The architecture we are achieving at the end is shown below, the regular Akri deployments will be able to handle and use devices discovered by a WebAssembly Discovery Handler running on a Krustlet node.
 
 <img src="./AkriUsingKrustletDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
 
-## Start your kubernetes cluster
+## Start your Kubernetes cluster
 
-For this demo we are using microk8s, but feel free to use any of your choice, krustlet has documentation for most of them [here](https://github.com/deislabs/krustlet/tree/main/docs/howto).
+For this demo we are using microk8s, but feel free to use any of your choice, Krustlet has documentation for most of them [here](https://github.com/krustlet/krustlet-docs/tree/main/content/howto).
 
 ## Start your krustlet node
 
-This can be done following krustlet tutorials [here](https://github.com/deislabs/krustlet/blob/main/docs/intro/quickstart.md).
+This can be done following Krustlet tutorials [here](https://github.com/krustlet/krustlet-docs/blob/main/content/intro/quickstart.md).
 
 ## Start Akri
 
-Lets make our cluster ready for handleling the discovered devices and for this we are using Akri's Debug Echo configurations, more information can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
+Let us make our cluster ready for handling the discovered devices and for this we are using Akri's Debug Echo configurations, more information can be found [here](https://github.com/deislabs/akri/blob/main/docs/debug-echo-configuration.md).
 
 ```
 helm repo add akri-helm-charts https://deislabs.github.io/akri/
