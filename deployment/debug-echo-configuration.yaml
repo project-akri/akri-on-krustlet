@@ -1,0 +1,50 @@
+# Source: akri/templates/debug-echo-configuration.yaml
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: akri-debug-echo
+spec:
+  discoveryHandler:
+    name: debugEcho
+    discoveryDetails: |+
+      descriptions:
+      - foo0
+  brokerPodSpec:
+    containers:
+    - name: im-using-debug-echo-devices
+      image: "ghcr.io/rodz/wasi-debug-echo-hello-world:v1"
+      resources:
+        requests:
+          "{{PLACEHOLDER}}" : "1"
+        limits:
+          "{{PLACEHOLDER}}" : "1"
+    nodeSelector:
+      kubernetes.io/arch: "wasm32-wasi"
+    tolerations:
+      - key: "kubernetes.io/arch"
+        operator: "Equal"
+        value: "wasm32-wasi"
+        effect: "NoExecute"
+      - key: "node.kubernetes.io/network-unavailable"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "kubernetes.io/arch"
+        operator: "Equal"
+        value: "wasm32-wasi"
+        effect: "NoSchedule"
+  instanceServiceSpec:
+    type: ClusterIP
+    ports:
+    - name: akri-debug-echo-foo-instance-service
+      port: 6052
+      protocol: TCP
+      targetPort: 6052
+  configurationServiceSpec:
+    type: ClusterIP
+    ports:
+    - name: akri-debug-echo-foo-configuration-service
+      port: 6052
+      protocol: TCP
+      targetPort: 6052
+  brokerProperties: {}
+  capacity: 2

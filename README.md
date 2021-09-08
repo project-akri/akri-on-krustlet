@@ -65,15 +65,9 @@ cargo run
 ## Demos
 
 ### Krustlet using Akri devices
-Try the [Krustlet using Akri devices demo](./demo-kubelet.md) to test and check out the usage of devices discovered by a WebAssembly Discovery Handler by a Wasm Module running on Krustlet. The result will be the architecture below.
+Try out this [demo](./demo-krustlet.md) of Akri's WebAssembly debug echo Discovery Handler discovering devices on a Krustlet node. Akri's Controller runs as a container on the control plane node, per usual, and deploys a Wasm broker to each discovered device. The result will be the architecture below, where local, Wasm, and containerized components are colored as grey, orange, and purple, respectively.
 
 <img src="./KrustletUsingAkriDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
-margin-right: auto; display: block; margin-left: auto;"/>
-
-### Akri using devices discovered by a Wasi Discovery Handler
-Try the [Krustlet and Akri Integration demo](./demo-kubelet.md) to test and check out the usage of devices discovered by a WebAssembly Discovery Handler into a regular Akri cluster. The result will be the architecture below.
-
-<img src="./AkriUsingKrustletDevicesDesign.png" alt="Krustlet integration architecture" style="padding-bottom: 10px padding-top: 10px;
 margin-right: auto; display: block; margin-left: auto;"/>
 
 ## Code of Conduct
