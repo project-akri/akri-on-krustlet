@@ -39,7 +39,7 @@ Now, we are ready to install Akri using its Helm chart. Note that we are disabli
 
 ```
 helm repo add akri-helm-charts https://deislabs.github.io/akri/
-helm install debug-config akri-helm-charts/akri \
+helm install akri akri-helm-charts/akri \
  --set agent.enabled=false
 ```
 
